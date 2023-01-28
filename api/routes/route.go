@@ -7,5 +7,9 @@ import (
 
 // Register your routes overhere
 func RegisterRoutes(app *fiber.App) {
-	app.Get("/", controllers.GetEducationPathwayData)
+	baseApi := app.Group("/api")
+	v1 := baseApi.Group("/v1")
+
+	educationResourceApi := v1.Group("/education")
+	educationResourceApi.Get("/", controllers.GetEducationPathwayData)
 }
