@@ -32,19 +32,36 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 
 	properties := cursor.Results[0].Properties
 
-	landingPageConfigId, landingPageConfigIdParseErr := uuid.Parse(properties["Active Landing Page"].ID)
+	landingPageConfigId, landingPageConfigIdParseErr := uuid.Parse(properties["Active Landing Page"].Relation[0].ID)
 	if landingPageConfigIdParseErr != nil {
 		return nil, landingPageConfigIdParseErr
 	}
 
-	siteConfigId, siteConfigIdParseErr := uuid.Parse(properties["Site Config"].ID)
-	if siteConfigIdParseErr != nil {
-		return nil, siteConfigIdParseErr
+	// siteConfigId, siteConfigIdParseErr := uuid.Parse(properties["Site Config"].ID)
+	// if siteConfigIdParseErr != nil {
+	// 	return nil, siteConfigIdParseErr
+	// }
+
+	landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
+	if landingPageRetrievedErr != nil {
+		return nil, landingPageRetrievedErr
 	}
 
-	// TODO(leeliwei930): "Query landingPageConfig and siteConfigPage properties using GetPage action"
+	var coverImageUrl string
+	if len(landingPage.Properties["Cover Image"].Files) > 0 {
+		coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
+	}
 
-	pageConfig := &models.PageConfiguration{}
+	pageConfig := &models.PageConfiguration{
+		LandingPage: models.LandingPage{
+			Title:               landingPage.Properties["Title"].Title[0].PlainText,
+			Description:         landingPage.Properties["Description"].RichText[0].PlainText,
+			CoverImage:          coverImageUrl,
+			PrimaryButtonText:   landingPage.Properties["Primary Button Text"].RichText[0].PlainText,
+			SecondaryButtonText: landingPage.Properties["Secondary Button Text"].RichText[0].PlainText,
+			SecondaryButtonLink: landingPage.Properties["Secondary Button Link"].Url,
+		},
+	}
 
 	return pageConfig, nil
 }
