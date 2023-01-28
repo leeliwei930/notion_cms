@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/google/uuid"
 	"github.com/leeliwei930/notion_cms/api/models"
@@ -41,27 +42,49 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 	// if siteConfigIdParseErr != nil {
 	// 	return nil, siteConfigIdParseErr
 	// }
+	var wg sync.WaitGroup
 
-	landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
-	if landingPageRetrievedErr != nil {
-		return nil, landingPageRetrievedErr
-	}
+	landingPageRetrievedErrChan := make(chan error)
+	landingPageChan := make(chan *models.LandingPage)
+	wg.Add(1)
 
-	var coverImageUrl string
-	if len(landingPage.Properties["Cover Image"].Files) > 0 {
-		coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
-	}
+	go func() {
+		defer wg.Done()
 
-	pageConfig := &models.PageConfiguration{
-		LandingPage: models.LandingPage{
+		landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
+		if landingPageRetrievedErr != nil {
+			landingPageRetrievedErrChan <- landingPageRetrievedErr
+			return
+		}
+
+		var coverImageUrl string
+		if len(landingPage.Properties["Cover Image"].Files) > 0 {
+			coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
+		}
+
+		landingPageChan <- &models.LandingPage{
 			Title:               landingPage.Properties["Title"].Title[0].PlainText,
 			Description:         landingPage.Properties["Description"].RichText[0].PlainText,
 			CoverImage:          coverImageUrl,
 			PrimaryButtonText:   landingPage.Properties["Primary Button Text"].RichText[0].PlainText,
 			SecondaryButtonText: landingPage.Properties["Secondary Button Text"].RichText[0].PlainText,
 			SecondaryButtonLink: landingPage.Properties["Secondary Button Link"].Url,
-		},
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(landingPageChan)
+		close(landingPageRetrievedErrChan)
+	}()
+	pageConfig := &models.PageConfiguration{}
+
+	select {
+	case landingPage := <-landingPageChan:
+		pageConfig.LandingPage = landingPage
+		return pageConfig, nil
+	case receiveErr := <-landingPageRetrievedErrChan:
+		return nil, receiveErr
 	}
 
-	return pageConfig, nil
 }

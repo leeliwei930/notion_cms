@@ -1,8 +1,8 @@
 package models
 
 type PageConfiguration struct {
-	LandingPage LandingPage `json:"landing_page,omitempty"`
-	Website     Website     `json:"website,omitempty"`
+	LandingPage *LandingPage `json:"landing_page,omitempty"`
+	Website     *Website     `json:"website,omitempty"`
 }
 
 type LandingPage struct {
