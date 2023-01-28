@@ -5,9 +5,8 @@ import (
 	"github.com/leeliwei930/notion_cms/api/resource"
 )
 
-func GetEducationPathwayData(ctx *fiber.Ctx) error {
-
-	data, err := resource.GetEducationPathwayResource()
+func GetDefaultPageConfig(ctx *fiber.Ctx) error {
+	data, err := resource.GetDefaultPageResource()
 	if err != nil {
 		return err
 	}

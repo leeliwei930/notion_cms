@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+
 	"github.com/leeliwei930/notion_cms/api/models"
 	"github.com/leeliwei930/notion_sdk/actions"
 )
 
 func GetEducationPathwayResource() ([]models.EducationPathway, error) {
-	educationPathwayDatabaseId, uuidErr := uuid.Parse("9ff25e1831bc475a9ff89b833fb536c3")
+	educationPathwayDatabaseId, uuidErr := uuid.Parse(EducationPathwayDatabaseId)
 	if uuidErr != nil {
 		return nil, uuidErr
 	}

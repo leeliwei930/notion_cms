@@ -10,6 +10,10 @@ func RegisterRoutes(app *fiber.App) {
 	baseApi := app.Group("/api")
 	v1 := baseApi.Group("/v1")
 
-	educationResourceApi := v1.Group("/education")
-	educationResourceApi.Get("/", controllers.GetEducationPathwayData)
+	educationResource := v1.Group("/education")
+	educationResource.Get("/", controllers.GetEducationPathwayData)
+
+	pageResource := v1.Group("/page")
+	pageResource.Get("/", controllers.GetDefaultPageConfig)
+
 }
