@@ -9,7 +9,7 @@ import (
 	"github.com/leeliwei930/notion_sdk/actions"
 )
 
-func GetEducationPathwayResource() ([]models.EducationPathway, error) {
+func GetEducationPathwayResource() ([]*models.EducationPathway, error) {
 	educationPathwayDatabaseId, uuidErr := uuid.Parse(EducationPathwayDatabaseId)
 	if uuidErr != nil {
 		return nil, uuidErr
@@ -24,10 +24,10 @@ func GetEducationPathwayResource() ([]models.EducationPathway, error) {
 		return nil, fmt.Errorf("no database block contains in the %s", educationPathwayDatabaseId.String())
 	}
 
-	educationPathway := []models.EducationPathway{}
+	educationPathway := []*models.EducationPathway{}
 	for _, result := range cursor.Results {
 		properties := result.Properties
-		educationPathway = append(educationPathway, models.EducationPathway{
+		educationPathway = append(educationPathway, &models.EducationPathway{
 			Title:         properties["Title"].Title[0].PlainText,
 			InstituteName: properties["Institute Name"].RichText[0].PlainText,
 			StudyArea:     properties["Study"].RichText[0].PlainText,

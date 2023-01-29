@@ -1,11 +1,11 @@
 package models
 
 type Milestone struct {
-	Year       string        `json:"year,omitempty"`
-	Summary    string        `json:"summary,omitempty"`
-	Role       string        `json:"role,omitempty"`
-	Theme      *Theme        `json:"theme,omitempty"`
-	Experience []*Experience `json:"experiences,omitempty"`
+	Year        string        `json:"year,omitempty"`
+	Summary     string        `json:"summary,omitempty"`
+	Role        string        `json:"role,omitempty"`
+	Theme       *Theme        `json:"theme,omitempty"`
+	Experiences []*Experience `json:"experiences,omitempty"`
 }
 
 type Theme struct {

@@ -11,13 +11,18 @@ import (
 	"github.com/leeliwei930/notion_cms/api/resource"
 )
 
-// EducationPathway is the resolver for the educationPathway field.
-func (r *queryResolver) EducationPathway(ctx context.Context) ([]models.EducationPathway, error) {
+// Education is the resolver for the education field.
+func (r *queryResolver) Education(ctx context.Context) ([]*models.EducationPathway, error) {
 	return resource.GetEducationPathwayResource()
 }
 
-// WebsiteConfig is the resolver for the websiteConfig field.
-func (r *queryResolver) WebsiteConfig(ctx context.Context) (*models.PageConfiguration, error) {
+// Milestones is the resolver for the milestones field.
+func (r *queryResolver) Milestones(ctx context.Context) ([]*models.Milestone, error) {
+	return resource.GetMilestonesExperiencesResource()
+}
+
+// Website is the resolver for the website field.
+func (r *queryResolver) Website(ctx context.Context) (*models.PageConfiguration, error) {
 	return resource.GetDefaultPageResource()
 }
 

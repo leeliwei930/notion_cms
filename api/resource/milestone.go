@@ -61,7 +61,7 @@ func GetMilestonesExperiencesResource() ([]*models.Milestone, error) {
 
 		}
 		milestone := findMilestoneByYear(year, milestones)
-		milestone.Experience = append(milestone.Experience, experiences...)
+		milestone.Experiences = append(milestone.Experiences, experiences...)
 	}
 
 	milestonesRes = append(milestonesRes, milestones...)

@@ -55,6 +55,10 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 	}
 
+	Experience struct {
+		RawContent func(childComplexity int) int
+	}
+
 	LandingPage struct {
 		CoverImage          func(childComplexity int) int
 		Description         func(childComplexity int) int
@@ -64,14 +68,29 @@ type ComplexityRoot struct {
 		Title               func(childComplexity int) int
 	}
 
+	Milestone struct {
+		Experiences func(childComplexity int) int
+		Role        func(childComplexity int) int
+		Summary     func(childComplexity int) int
+		Theme       func(childComplexity int) int
+		Year        func(childComplexity int) int
+	}
+
 	PageConfiguration struct {
 		LandingPage func(childComplexity int) int
 		Website     func(childComplexity int) int
 	}
 
 	Query struct {
-		EducationPathway func(childComplexity int) int
-		WebsiteConfig    func(childComplexity int) int
+		Education  func(childComplexity int) int
+		Milestones func(childComplexity int) int
+		Website    func(childComplexity int) int
+	}
+
+	Theme struct {
+		AccentColor     func(childComplexity int) int
+		BackgroundColor func(childComplexity int) int
+		HeadlineColor   func(childComplexity int) int
 	}
 
 	Website struct {
@@ -82,8 +101,9 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	EducationPathway(ctx context.Context) ([]models.EducationPathway, error)
-	WebsiteConfig(ctx context.Context) (*models.PageConfiguration, error)
+	Education(ctx context.Context) ([]*models.EducationPathway, error)
+	Milestones(ctx context.Context) ([]*models.Milestone, error)
+	Website(ctx context.Context) (*models.PageConfiguration, error)
 }
 
 type executableSchema struct {
@@ -157,6 +177,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EducationPathway.Title(childComplexity), true
 
+	case "Experience.rawContent":
+		if e.complexity.Experience.RawContent == nil {
+			break
+		}
+
+		return e.complexity.Experience.RawContent(childComplexity), true
+
 	case "LandingPage.coverImage":
 		if e.complexity.LandingPage.CoverImage == nil {
 			break
@@ -199,6 +226,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.LandingPage.Title(childComplexity), true
 
+	case "Milestone.experiences":
+		if e.complexity.Milestone.Experiences == nil {
+			break
+		}
+
+		return e.complexity.Milestone.Experiences(childComplexity), true
+
+	case "Milestone.Role":
+		if e.complexity.Milestone.Role == nil {
+			break
+		}
+
+		return e.complexity.Milestone.Role(childComplexity), true
+
+	case "Milestone.summary":
+		if e.complexity.Milestone.Summary == nil {
+			break
+		}
+
+		return e.complexity.Milestone.Summary(childComplexity), true
+
+	case "Milestone.Theme":
+		if e.complexity.Milestone.Theme == nil {
+			break
+		}
+
+		return e.complexity.Milestone.Theme(childComplexity), true
+
+	case "Milestone.year":
+		if e.complexity.Milestone.Year == nil {
+			break
+		}
+
+		return e.complexity.Milestone.Year(childComplexity), true
+
 	case "PageConfiguration.landingPage":
 		if e.complexity.PageConfiguration.LandingPage == nil {
 			break
@@ -213,19 +275,47 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PageConfiguration.Website(childComplexity), true
 
-	case "Query.educationPathway":
-		if e.complexity.Query.EducationPathway == nil {
+	case "Query.education":
+		if e.complexity.Query.Education == nil {
 			break
 		}
 
-		return e.complexity.Query.EducationPathway(childComplexity), true
+		return e.complexity.Query.Education(childComplexity), true
 
-	case "Query.websiteConfig":
-		if e.complexity.Query.WebsiteConfig == nil {
+	case "Query.milestones":
+		if e.complexity.Query.Milestones == nil {
 			break
 		}
 
-		return e.complexity.Query.WebsiteConfig(childComplexity), true
+		return e.complexity.Query.Milestones(childComplexity), true
+
+	case "Query.website":
+		if e.complexity.Query.Website == nil {
+			break
+		}
+
+		return e.complexity.Query.Website(childComplexity), true
+
+	case "Theme.accentColor":
+		if e.complexity.Theme.AccentColor == nil {
+			break
+		}
+
+		return e.complexity.Theme.AccentColor(childComplexity), true
+
+	case "Theme.backgroundColor":
+		if e.complexity.Theme.BackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.Theme.BackgroundColor(childComplexity), true
+
+	case "Theme.headlineColor":
+		if e.complexity.Theme.HeadlineColor == nil {
+			break
+		}
+
+		return e.complexity.Theme.HeadlineColor(childComplexity), true
 
 	case "Website.name":
 		if e.complexity.Website.Name == nil {
@@ -718,6 +808,50 @@ func (ec *executionContext) fieldContext_EducationPathway_completedOn(ctx contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Experience_rawContent(ctx context.Context, field graphql.CollectedField, obj *models.Experience) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Experience_rawContent(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RawContent, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Experience_rawContent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Experience",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _LandingPage_title(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_LandingPage_title(ctx, field)
 	if err != nil {
@@ -982,6 +1116,235 @@ func (ec *executionContext) fieldContext_LandingPage_secondaryButtonLink(ctx con
 	return fc, nil
 }
 
+func (ec *executionContext) _Milestone_year(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_year(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Year, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Milestone_year(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Milestone",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Milestone_summary(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_summary(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Summary, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Milestone_summary(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Milestone",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Milestone_Role(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_Role(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Role, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Milestone_Role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Milestone",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Milestone_Theme(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_Theme(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Theme, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Theme)
+	fc.Result = res
+	return ec.marshalOTheme2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐTheme(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Milestone_Theme(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Milestone",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "backgroundColor":
+				return ec.fieldContext_Theme_backgroundColor(ctx, field)
+			case "accentColor":
+				return ec.fieldContext_Theme_accentColor(ctx, field)
+			case "headlineColor":
+				return ec.fieldContext_Theme_headlineColor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Theme", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Milestone_experiences(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_experiences(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Experiences, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.Experience)
+	fc.Result = res
+	return ec.marshalNExperience2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐExperienceᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Milestone_experiences(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Milestone",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "rawContent":
+				return ec.fieldContext_Experience_rawContent(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Experience", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageConfiguration_landingPage(ctx context.Context, field graphql.CollectedField, obj *models.PageConfiguration) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageConfiguration_landingPage(ctx, field)
 	if err != nil {
@@ -1092,8 +1455,8 @@ func (ec *executionContext) fieldContext_PageConfiguration_website(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_educationPathway(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_educationPathway(ctx, field)
+func (ec *executionContext) _Query_education(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_education(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1106,7 +1469,7 @@ func (ec *executionContext) _Query_educationPathway(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().EducationPathway(rctx)
+		return ec.resolvers.Query().Education(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1117,12 +1480,12 @@ func (ec *executionContext) _Query_educationPathway(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]models.EducationPathway)
+	res := resTmp.([]*models.EducationPathway)
 	fc.Result = res
-	return ec.marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx, field.Selections, res)
+	return ec.marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_educationPathway(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_education(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -1153,8 +1516,8 @@ func (ec *executionContext) fieldContext_Query_educationPathway(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_websiteConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_websiteConfig(ctx, field)
+func (ec *executionContext) _Query_milestones(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_milestones(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1167,7 +1530,62 @@ func (ec *executionContext) _Query_websiteConfig(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().WebsiteConfig(rctx)
+		return ec.resolvers.Query().Milestones(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.Milestone)
+	fc.Result = res
+	return ec.marshalNMilestone2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐMilestoneᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_milestones(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "year":
+				return ec.fieldContext_Milestone_year(ctx, field)
+			case "summary":
+				return ec.fieldContext_Milestone_summary(ctx, field)
+			case "Role":
+				return ec.fieldContext_Milestone_Role(ctx, field)
+			case "Theme":
+				return ec.fieldContext_Milestone_Theme(ctx, field)
+			case "experiences":
+				return ec.fieldContext_Milestone_experiences(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Milestone", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_website(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_website(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Website(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1180,7 +1598,7 @@ func (ec *executionContext) _Query_websiteConfig(ctx context.Context, field grap
 	return ec.marshalOPageConfiguration2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐPageConfiguration(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_websiteConfig(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_website(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -1321,6 +1739,138 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Theme_backgroundColor(ctx context.Context, field graphql.CollectedField, obj *models.Theme) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Theme_backgroundColor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BackgroundColor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Theme_backgroundColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Theme",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Theme_accentColor(ctx context.Context, field graphql.CollectedField, obj *models.Theme) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Theme_accentColor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AccentColor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Theme_accentColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Theme",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Theme_headlineColor(ctx context.Context, field graphql.CollectedField, obj *models.Theme) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Theme_headlineColor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HeadlineColor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Theme_headlineColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Theme",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3310,6 +3860,34 @@ func (ec *executionContext) _EducationPathway(ctx context.Context, sel ast.Selec
 	return out
 }
 
+var experienceImplementors = []string{"Experience"}
+
+func (ec *executionContext) _Experience(ctx context.Context, sel ast.SelectionSet, obj *models.Experience) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, experienceImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Experience")
+		case "rawContent":
+
+			out.Values[i] = ec._Experience_rawContent(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var landingPageImplementors = []string{"LandingPage"}
 
 func (ec *executionContext) _LandingPage(ctx context.Context, sel ast.SelectionSet, obj *models.LandingPage) graphql.Marshaler {
@@ -3358,6 +3936,59 @@ func (ec *executionContext) _LandingPage(ctx context.Context, sel ast.SelectionS
 		case "secondaryButtonLink":
 
 			out.Values[i] = ec._LandingPage_secondaryButtonLink(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var milestoneImplementors = []string{"Milestone"}
+
+func (ec *executionContext) _Milestone(ctx context.Context, sel ast.SelectionSet, obj *models.Milestone) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, milestoneImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Milestone")
+		case "year":
+
+			out.Values[i] = ec._Milestone_year(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "summary":
+
+			out.Values[i] = ec._Milestone_summary(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Role":
+
+			out.Values[i] = ec._Milestone_Role(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Theme":
+
+			out.Values[i] = ec._Milestone_Theme(ctx, field, obj)
+
+		case "experiences":
+
+			out.Values[i] = ec._Milestone_experiences(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3426,7 +4057,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "educationPathway":
+		case "education":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -3435,7 +4066,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_educationPathway(ctx, field)
+				res = ec._Query_education(ctx, field)
 				return res
 			}
 
@@ -3446,7 +4077,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "websiteConfig":
+		case "milestones":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -3455,7 +4086,27 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_websiteConfig(ctx, field)
+				res = ec._Query_milestones(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "website":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_website(ctx, field)
 				return res
 			}
 
@@ -3483,6 +4134,48 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		}
 	}
 	out.Dispatch()
+	return out
+}
+
+var themeImplementors = []string{"Theme"}
+
+func (ec *executionContext) _Theme(ctx context.Context, sel ast.SelectionSet, obj *models.Theme) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, themeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Theme")
+		case "backgroundColor":
+
+			out.Values[i] = ec._Theme_backgroundColor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "accentColor":
+
+			out.Values[i] = ec._Theme_accentColor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "headlineColor":
+
+			out.Values[i] = ec._Theme_headlineColor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
 	return out
 }
 
@@ -3861,11 +4554,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNEducationPathway2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx context.Context, sel ast.SelectionSet, v models.EducationPathway) graphql.Marshaler {
-	return ec._EducationPathway(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx context.Context, sel ast.SelectionSet, v []models.EducationPathway) graphql.Marshaler {
+func (ec *executionContext) marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.EducationPathway) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3889,7 +4578,7 @@ func (ec *executionContext) marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei9
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEducationPathway2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx, sel, v[i])
+			ret[i] = ec.marshalNEducationPathway2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3909,8 +4598,126 @@ func (ec *executionContext) marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei9
 	return ret
 }
 
+func (ec *executionContext) marshalNEducationPathway2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx context.Context, sel ast.SelectionSet, v *models.EducationPathway) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EducationPathway(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNExperience2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐExperienceᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Experience) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNExperience2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐExperience(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNExperience2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐExperience(ctx context.Context, sel ast.SelectionSet, v *models.Experience) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Experience(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNLandingPage2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐLandingPage(ctx context.Context, sel ast.SelectionSet, v models.LandingPage) graphql.Marshaler {
 	return ec._LandingPage(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMilestone2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐMilestoneᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Milestone) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNMilestone2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐMilestone(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNMilestone2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐMilestone(ctx context.Context, sel ast.SelectionSet, v *models.Milestone) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Milestone(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -4232,6 +5039,13 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOTheme2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐTheme(ctx context.Context, sel ast.SelectionSet, v *models.Theme) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Theme(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {

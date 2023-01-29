@@ -34,7 +34,26 @@ type Website {
   titleFormat: String!
 }
 
+type Milestone {
+  year: String!
+  summary: String!
+  Role: String!
+  Theme: Theme
+  experiences: [Experience!]!
+}
+
+type Theme {
+  backgroundColor: String!
+  accentColor: String!
+  headlineColor: String!
+}
+
+type Experience {
+  rawContent: String!
+}
+
 type Query {
-  educationPathway: [EducationPathway!]!
-  websiteConfig: PageConfiguration
+  education: [EducationPathway!]!
+  milestones: [Milestone!]!
+  website: PageConfiguration
 }
