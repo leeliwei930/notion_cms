@@ -17,63 +17,82 @@ func GetMilestonesExperiencesResource() ([]*models.Milestone, error) {
 	if queryErr != nil {
 		return nil, queryErr
 	}
-	milestonesRes := []*models.Milestone{}
 	milestones := []*models.Milestone{}
-	milestoneThemes := make(map[string]string)
-	milestoneExperiences := make(map[string][]notionModels.RelationPropertyValue)
 	// fetch experience page record
 	for _, milestoneRec := range cursor.Results {
 		yearProp := milestoneRec.Properties["Year"].Title[0].PlainText
+
+		themeChan, themeChanErr := FetchMilestoneTheme(milestoneRec.Properties["Theme"].Relation[0].ID)
+		theme, themeErr := <-themeChan, <-themeChanErr
+		if themeErr != nil {
+			return nil, themeErr
+		}
+
+		experiencesChan, experiencesChanErr := FetchExperiences(milestoneRec.Properties["Experiences"].Relation)
+		experiences, experiencesErr := <-experiencesChan, <-experiencesChanErr
+		if experiencesErr != nil {
+			return nil, experiencesErr
+		}
+
 		milestones = append(milestones, &models.Milestone{
-			Year:    yearProp,
-			Role:    milestoneRec.Properties["Role"].RichText[0].PlainText,
-			Summary: milestoneRec.Properties["Summary"].RichText[0].PlainText,
+			Year:        yearProp,
+			Role:        milestoneRec.Properties["Role"].RichText[0].PlainText,
+			Summary:     milestoneRec.Properties["Summary"].RichText[0].PlainText,
+			Theme:       &theme,
+			Experiences: experiences,
 		})
-		milestoneThemes[yearProp] = milestoneRec.Properties["Theme"].Relation[0].ID
-		milestoneExperiences[yearProp] = milestoneRec.Properties["Experiences"].Relation
+
 	}
 
-	// fetch theme record
-	for year, themeId := range milestoneThemes {
-		themePage, themePageErr := actions.RetrievePage(uuid.MustParse(themeId))
+	return milestones, nil
+}
+
+func FetchMilestoneTheme(milestoneThemeId string) (<-chan models.Theme, <-chan error) {
+	themeChan := make(chan models.Theme)
+	errorChan := make(chan error)
+
+	go func() {
+		defer close(themeChan)
+		defer close(errorChan)
+		themePage, themePageErr := actions.RetrievePage(uuid.MustParse(milestoneThemeId))
 		if themePageErr != nil {
-			return milestonesRes, themePageErr
+			errorChan <- themePageErr
+			return
 		}
-		milestone := findMilestoneByYear(year, milestones)
-		milestone.Theme = &models.Theme{
+		themeChan <- models.Theme{
 			BackgroundColor: themePage.Properties["Background Color"].Select.Name,
 			AccentColor:     themePage.Properties["Accent Color"].Select.Name,
 			HeadlineColor:   themePage.Properties["Headline Color"].Select.Name,
 		}
-	}
+	}()
 
-	for year, experienceIds := range milestoneExperiences {
-		experiences := []*models.Experience{}
+	return themeChan, errorChan
+}
+
+func FetchExperiences(experienceIds []notionModels.RelationPropertyValue) (<-chan []*models.Experience, <-chan error) {
+	experiencesChan := make(chan []*models.Experience)
+	errorChan := make(chan error)
+
+	go func() {
+		defer close(experiencesChan)
+		defer close(errorChan)
+
+		var experiences []*models.Experience
+
 		for _, experienceId := range experienceIds {
 			experiencePage, experiencePageErr := actions.RetrievePage(uuid.MustParse(experienceId.ID))
 			if experiencePageErr != nil {
-				return milestonesRes, experiencePageErr
+				errorChan <- experiencePageErr
+				return
 			}
-
 			experiences = append(experiences, &models.Experience{
 				RawContent: experiencePage.Properties["Content"].Title[0].PlainText,
 			})
-
 		}
-		milestone := findMilestoneByYear(year, milestones)
-		milestone.Experiences = append(milestone.Experiences, experiences...)
-	}
 
-	milestonesRes = append(milestonesRes, milestones...)
+		experiencesChan <- experiences
+	}()
 
-	return milestonesRes, nil
-}
+	return experiencesChan, errorChan
 
-func findMilestoneByYear(year string, milestones []*models.Milestone) *models.Milestone {
-	for _, milestone := range milestones {
-		if milestone.Year == year {
-			return milestone
-		}
-	}
-	return nil
 }
