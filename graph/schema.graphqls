@@ -1,0 +1,19 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+scalar Time
+
+type EducationPathway {
+  title: String!
+  instituteName: String!
+  studyArea: String!
+  icon: String!
+  image: String!
+  location: String!
+  commencedOn: Time
+  completedOn: Time
+}
+
+type Query {
+  educationPathway: [EducationPathway!]!
+}
