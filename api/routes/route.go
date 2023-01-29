@@ -5,12 +5,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/leeliwei930/notion_cms/api/controllers"
 	"github.com/leeliwei930/notion_cms/graph"
 )
 
 // Register your routes overhere
 func RegisterRoutes(app *fiber.App) {
+	app.Get("/metrics", monitor.New())
 	graphQL := app.Group("/graphql")
 	baseApi := app.Group("/api")
 	v1 := baseApi.Group("/v1")

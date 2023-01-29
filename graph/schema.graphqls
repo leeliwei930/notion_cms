@@ -38,7 +38,7 @@ type Milestone {
   year: String!
   summary: String!
   Role: String!
-  Theme: Theme
+  theme: Theme
   experiences: [Experience!]!
 }
 

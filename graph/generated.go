@@ -247,7 +247,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Milestone.Summary(childComplexity), true
 
-	case "Milestone.Theme":
+	case "Milestone.theme":
 		if e.complexity.Milestone.Theme == nil {
 			break
 		}
@@ -1248,8 +1248,8 @@ func (ec *executionContext) fieldContext_Milestone_Role(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Milestone_Theme(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Milestone_Theme(ctx, field)
+func (ec *executionContext) _Milestone_theme(ctx context.Context, field graphql.CollectedField, obj *models.Milestone) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Milestone_theme(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1276,7 +1276,7 @@ func (ec *executionContext) _Milestone_Theme(ctx context.Context, field graphql.
 	return ec.marshalOTheme2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐTheme(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Milestone_Theme(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Milestone_theme(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Milestone",
 		Field:      field,
@@ -1560,8 +1560,8 @@ func (ec *executionContext) fieldContext_Query_milestones(ctx context.Context, f
 				return ec.fieldContext_Milestone_summary(ctx, field)
 			case "Role":
 				return ec.fieldContext_Milestone_Role(ctx, field)
-			case "Theme":
-				return ec.fieldContext_Milestone_Theme(ctx, field)
+			case "theme":
+				return ec.fieldContext_Milestone_theme(ctx, field)
 			case "experiences":
 				return ec.fieldContext_Milestone_experiences(ctx, field)
 			}
@@ -3982,9 +3982,9 @@ func (ec *executionContext) _Milestone(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "Theme":
+		case "theme":
 
-			out.Values[i] = ec._Milestone_Theme(ctx, field, obj)
+			out.Values[i] = ec._Milestone_theme(ctx, field, obj)
 
 		case "experiences":
 
