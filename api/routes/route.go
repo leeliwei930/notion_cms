@@ -21,6 +21,8 @@ func RegisterRoutes(app *fiber.App) {
 	pageResource := v1.Group("/page")
 	pageResource.Get("/", controllers.GetDefaultPageConfig)
 
+	milestoneResource := v1.Group("/milestone")
+	milestoneResource.Get("/", controllers.GetMilestones)
 	graphQLSrv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
 	graphQL.Get("/playground", adaptor.HTTPHandlerFunc(playground.Handler("NotionCMS GraphQL playground", "/graphql/query")))
