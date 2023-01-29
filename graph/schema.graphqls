@@ -14,6 +14,27 @@ type EducationPathway {
   completedOn: Time
 }
 
+type PageConfiguration {
+  landingPage: LandingPage!
+  website: Website!
+}
+
+type LandingPage {
+  title: String!
+  description: String!
+  coverImage: String!
+  primaryButtonText: String!
+  secondaryButtonText: String!
+  secondaryButtonLink: String!
+}
+
+type Website {
+  name: String!
+  separator: String!
+  titleFormat: String!
+}
+
 type Query {
   educationPathway: [EducationPathway!]!
+  websiteConfig: PageConfiguration
 }

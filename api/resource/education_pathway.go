@@ -33,6 +33,7 @@ func GetEducationPathwayResource() ([]models.EducationPathway, error) {
 			StudyArea:     properties["Study"].RichText[0].PlainText,
 			Icon:          properties["Icon"].Files[0].File.Url,
 			Image:         properties["Image"].Files[0].File.Url,
+			Location:      properties["Location"].RichText[0].PlainText,
 			CommencedOn:   &properties["Commenced On"].Date.Start.Time,
 			CompletedOn:   &properties["Completed On"].Date.Start.Time,
 		})

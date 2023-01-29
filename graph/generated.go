@@ -55,13 +55,35 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 	}
 
+	LandingPage struct {
+		CoverImage          func(childComplexity int) int
+		Description         func(childComplexity int) int
+		PrimaryButtonText   func(childComplexity int) int
+		SecondaryButtonLink func(childComplexity int) int
+		SecondaryButtonText func(childComplexity int) int
+		Title               func(childComplexity int) int
+	}
+
+	PageConfiguration struct {
+		LandingPage func(childComplexity int) int
+		Website     func(childComplexity int) int
+	}
+
 	Query struct {
 		EducationPathway func(childComplexity int) int
+		WebsiteConfig    func(childComplexity int) int
+	}
+
+	Website struct {
+		Name        func(childComplexity int) int
+		Separator   func(childComplexity int) int
+		TitleFormat func(childComplexity int) int
 	}
 }
 
 type QueryResolver interface {
 	EducationPathway(ctx context.Context) ([]models.EducationPathway, error)
+	WebsiteConfig(ctx context.Context) (*models.PageConfiguration, error)
 }
 
 type executableSchema struct {
@@ -135,12 +157,96 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EducationPathway.Title(childComplexity), true
 
+	case "LandingPage.coverImage":
+		if e.complexity.LandingPage.CoverImage == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.CoverImage(childComplexity), true
+
+	case "LandingPage.description":
+		if e.complexity.LandingPage.Description == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.Description(childComplexity), true
+
+	case "LandingPage.primaryButtonText":
+		if e.complexity.LandingPage.PrimaryButtonText == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.PrimaryButtonText(childComplexity), true
+
+	case "LandingPage.secondaryButtonLink":
+		if e.complexity.LandingPage.SecondaryButtonLink == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.SecondaryButtonLink(childComplexity), true
+
+	case "LandingPage.secondaryButtonText":
+		if e.complexity.LandingPage.SecondaryButtonText == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.SecondaryButtonText(childComplexity), true
+
+	case "LandingPage.title":
+		if e.complexity.LandingPage.Title == nil {
+			break
+		}
+
+		return e.complexity.LandingPage.Title(childComplexity), true
+
+	case "PageConfiguration.landingPage":
+		if e.complexity.PageConfiguration.LandingPage == nil {
+			break
+		}
+
+		return e.complexity.PageConfiguration.LandingPage(childComplexity), true
+
+	case "PageConfiguration.website":
+		if e.complexity.PageConfiguration.Website == nil {
+			break
+		}
+
+		return e.complexity.PageConfiguration.Website(childComplexity), true
+
 	case "Query.educationPathway":
 		if e.complexity.Query.EducationPathway == nil {
 			break
 		}
 
 		return e.complexity.Query.EducationPathway(childComplexity), true
+
+	case "Query.websiteConfig":
+		if e.complexity.Query.WebsiteConfig == nil {
+			break
+		}
+
+		return e.complexity.Query.WebsiteConfig(childComplexity), true
+
+	case "Website.name":
+		if e.complexity.Website.Name == nil {
+			break
+		}
+
+		return e.complexity.Website.Name(childComplexity), true
+
+	case "Website.separator":
+		if e.complexity.Website.Separator == nil {
+			break
+		}
+
+		return e.complexity.Website.Separator(childComplexity), true
+
+	case "Website.titleFormat":
+		if e.complexity.Website.TitleFormat == nil {
+			break
+		}
+
+		return e.complexity.Website.TitleFormat(childComplexity), true
 
 	}
 	return 0, false
@@ -612,6 +718,380 @@ func (ec *executionContext) fieldContext_EducationPathway_completedOn(ctx contex
 	return fc, nil
 }
 
+func (ec *executionContext) _LandingPage_title(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LandingPage_description(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LandingPage_coverImage(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_coverImage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CoverImage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_coverImage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LandingPage_primaryButtonText(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_primaryButtonText(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrimaryButtonText, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_primaryButtonText(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LandingPage_secondaryButtonText(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_secondaryButtonText(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SecondaryButtonText, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_secondaryButtonText(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _LandingPage_secondaryButtonLink(ctx context.Context, field graphql.CollectedField, obj *models.LandingPage) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LandingPage_secondaryButtonLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SecondaryButtonLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LandingPage_secondaryButtonLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LandingPage",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageConfiguration_landingPage(ctx context.Context, field graphql.CollectedField, obj *models.PageConfiguration) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageConfiguration_landingPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LandingPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.LandingPage)
+	fc.Result = res
+	return ec.marshalNLandingPage2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐLandingPage(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageConfiguration_landingPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageConfiguration",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "title":
+				return ec.fieldContext_LandingPage_title(ctx, field)
+			case "description":
+				return ec.fieldContext_LandingPage_description(ctx, field)
+			case "coverImage":
+				return ec.fieldContext_LandingPage_coverImage(ctx, field)
+			case "primaryButtonText":
+				return ec.fieldContext_LandingPage_primaryButtonText(ctx, field)
+			case "secondaryButtonText":
+				return ec.fieldContext_LandingPage_secondaryButtonText(ctx, field)
+			case "secondaryButtonLink":
+				return ec.fieldContext_LandingPage_secondaryButtonLink(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LandingPage", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageConfiguration_website(ctx context.Context, field graphql.CollectedField, obj *models.PageConfiguration) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageConfiguration_website(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Website, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.Website)
+	fc.Result = res
+	return ec.marshalNWebsite2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐWebsite(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageConfiguration_website(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageConfiguration",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Website_name(ctx, field)
+			case "separator":
+				return ec.fieldContext_Website_separator(ctx, field)
+			case "titleFormat":
+				return ec.fieldContext_Website_titleFormat(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Website", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_educationPathway(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_educationPathway(ctx, field)
 	if err != nil {
@@ -668,6 +1148,52 @@ func (ec *executionContext) fieldContext_Query_educationPathway(ctx context.Cont
 				return ec.fieldContext_EducationPathway_completedOn(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EducationPathway", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_websiteConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_websiteConfig(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().WebsiteConfig(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PageConfiguration)
+	fc.Result = res
+	return ec.marshalOPageConfiguration2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐPageConfiguration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_websiteConfig(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "landingPage":
+				return ec.fieldContext_PageConfiguration_landingPage(ctx, field)
+			case "website":
+				return ec.fieldContext_PageConfiguration_website(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageConfiguration", field.Name)
 		},
 	}
 	return fc, nil
@@ -795,6 +1321,138 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Website_name(ctx context.Context, field graphql.CollectedField, obj *models.Website) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Website_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Website_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Website",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Website_separator(ctx context.Context, field graphql.CollectedField, obj *models.Website) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Website_separator(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Separator, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Website_separator(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Website",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Website_titleFormat(ctx context.Context, field graphql.CollectedField, obj *models.Website) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Website_titleFormat(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TitleFormat, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Website_titleFormat(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Website",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2652,6 +3310,104 @@ func (ec *executionContext) _EducationPathway(ctx context.Context, sel ast.Selec
 	return out
 }
 
+var landingPageImplementors = []string{"LandingPage"}
+
+func (ec *executionContext) _LandingPage(ctx context.Context, sel ast.SelectionSet, obj *models.LandingPage) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, landingPageImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LandingPage")
+		case "title":
+
+			out.Values[i] = ec._LandingPage_title(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "description":
+
+			out.Values[i] = ec._LandingPage_description(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "coverImage":
+
+			out.Values[i] = ec._LandingPage_coverImage(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "primaryButtonText":
+
+			out.Values[i] = ec._LandingPage_primaryButtonText(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "secondaryButtonText":
+
+			out.Values[i] = ec._LandingPage_secondaryButtonText(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "secondaryButtonLink":
+
+			out.Values[i] = ec._LandingPage_secondaryButtonLink(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var pageConfigurationImplementors = []string{"PageConfiguration"}
+
+func (ec *executionContext) _PageConfiguration(ctx context.Context, sel ast.SelectionSet, obj *models.PageConfiguration) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pageConfigurationImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PageConfiguration")
+		case "landingPage":
+
+			out.Values[i] = ec._PageConfiguration_landingPage(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "website":
+
+			out.Values[i] = ec._PageConfiguration_website(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -2690,6 +3446,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "websiteConfig":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_websiteConfig(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "__type":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -2707,6 +3483,48 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		}
 	}
 	out.Dispatch()
+	return out
+}
+
+var websiteImplementors = []string{"Website"}
+
+func (ec *executionContext) _Website(ctx context.Context, sel ast.SelectionSet, obj *models.Website) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, websiteImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Website")
+		case "name":
+
+			out.Values[i] = ec._Website_name(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "separator":
+
+			out.Values[i] = ec._Website_separator(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "titleFormat":
+
+			out.Values[i] = ec._Website_titleFormat(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
 	return out
 }
 
@@ -3091,6 +3909,10 @@ func (ec *executionContext) marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei9
 	return ret
 }
 
+func (ec *executionContext) marshalNLandingPage2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐLandingPage(ctx context.Context, sel ast.SelectionSet, v models.LandingPage) graphql.Marshaler {
+	return ec._LandingPage(ctx, sel, &v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3104,6 +3926,10 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNWebsite2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐWebsite(ctx context.Context, sel ast.SelectionSet, v models.Website) graphql.Marshaler {
+	return ec._Website(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -3383,6 +4209,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOPageConfiguration2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐPageConfiguration(ctx context.Context, sel ast.SelectionSet, v *models.PageConfiguration) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PageConfiguration(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,6 +27,6 @@ func Start(config ...fiber.Config) {
 		EnableStackTrace: true,
 	}))
 	routes.RegisterRoutes(server)
-	server.Listen(addr)
+	log.Fatal(server.Listen(addr))
 
 }

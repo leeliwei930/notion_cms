@@ -16,6 +16,11 @@ func (r *queryResolver) EducationPathway(ctx context.Context) ([]models.Educatio
 	return resource.GetEducationPathwayResource()
 }
 
+// WebsiteConfig is the resolver for the websiteConfig field.
+func (r *queryResolver) WebsiteConfig(ctx context.Context) (*models.PageConfiguration, error) {
+	return resource.GetDefaultPageResource()
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
