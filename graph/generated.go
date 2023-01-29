@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/leeliwei930/notion_cms/graph/model"
+	"github.com/leeliwei930/notion_cms/api/models"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -61,7 +61,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	EducationPathway(ctx context.Context) ([]*model.EducationPathway, error)
+	EducationPathway(ctx context.Context) ([]models.EducationPathway, error)
 }
 
 type executableSchema struct {
@@ -266,7 +266,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _EducationPathway_title(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_title(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_title(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -310,7 +310,7 @@ func (ec *executionContext) fieldContext_EducationPathway_title(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_instituteName(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_instituteName(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_instituteName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -354,7 +354,7 @@ func (ec *executionContext) fieldContext_EducationPathway_instituteName(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_studyArea(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_studyArea(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_studyArea(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -398,7 +398,7 @@ func (ec *executionContext) fieldContext_EducationPathway_studyArea(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_icon(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_icon(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_icon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -442,7 +442,7 @@ func (ec *executionContext) fieldContext_EducationPathway_icon(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_image(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_image(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_image(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -486,7 +486,7 @@ func (ec *executionContext) fieldContext_EducationPathway_image(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_location(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_location(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_location(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -530,7 +530,7 @@ func (ec *executionContext) fieldContext_EducationPathway_location(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_commencedOn(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_commencedOn(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_commencedOn(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -571,7 +571,7 @@ func (ec *executionContext) fieldContext_EducationPathway_commencedOn(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _EducationPathway_completedOn(ctx context.Context, field graphql.CollectedField, obj *model.EducationPathway) (ret graphql.Marshaler) {
+func (ec *executionContext) _EducationPathway_completedOn(ctx context.Context, field graphql.CollectedField, obj *models.EducationPathway) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_EducationPathway_completedOn(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -637,9 +637,9 @@ func (ec *executionContext) _Query_educationPathway(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.EducationPathway)
+	res := resTmp.([]models.EducationPathway)
 	fc.Result = res
-	return ec.marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgraphᚋmodelᚐEducationPathwayᚄ(ctx, field.Selections, res)
+	return ec.marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_educationPathway(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2583,7 +2583,7 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 var educationPathwayImplementors = []string{"EducationPathway"}
 
-func (ec *executionContext) _EducationPathway(ctx context.Context, sel ast.SelectionSet, obj *model.EducationPathway) graphql.Marshaler {
+func (ec *executionContext) _EducationPathway(ctx context.Context, sel ast.SelectionSet, obj *models.EducationPathway) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, educationPathwayImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -3043,7 +3043,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgraphᚋmodelᚐEducationPathwayᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EducationPathway) graphql.Marshaler {
+func (ec *executionContext) marshalNEducationPathway2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx context.Context, sel ast.SelectionSet, v models.EducationPathway) graphql.Marshaler {
+	return ec._EducationPathway(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEducationPathway2ᚕgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathwayᚄ(ctx context.Context, sel ast.SelectionSet, v []models.EducationPathway) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3067,7 +3071,7 @@ func (ec *executionContext) marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliw
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEducationPathway2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgraphᚋmodelᚐEducationPathway(ctx, sel, v[i])
+			ret[i] = ec.marshalNEducationPathway2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋapiᚋmodelsᚐEducationPathway(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3085,16 +3089,6 @@ func (ec *executionContext) marshalNEducationPathway2ᚕᚖgithubᚗcomᚋleeliw
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalNEducationPathway2ᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgraphᚋmodelᚐEducationPathway(ctx context.Context, sel ast.SelectionSet, v *model.EducationPathway) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._EducationPathway(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

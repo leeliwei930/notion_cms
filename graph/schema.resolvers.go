@@ -7,30 +7,13 @@ package graph
 import (
 	"context"
 
+	"github.com/leeliwei930/notion_cms/api/models"
 	"github.com/leeliwei930/notion_cms/api/resource"
-	"github.com/leeliwei930/notion_cms/graph/model"
 )
 
 // EducationPathway is the resolver for the educationPathway field.
-func (r *queryResolver) EducationPathway(ctx context.Context) ([]*model.EducationPathway, error) {
-	educationPathways, err := resource.GetEducationPathwayResource()
-	mappedEducationPathways := []*model.EducationPathway{}
-
-	for _, education := range educationPathways {
-		mappedEducationPathways = append(mappedEducationPathways, &model.EducationPathway{
-			Title:         education.Title,
-			InstituteName: education.InstituteName,
-			StudyArea:     education.StudyArea,
-			Icon:          education.Icon,
-			Image:         education.Image,
-			Location:      education.Location,
-			CommencedOn:   education.CommencedOn,
-			CompletedOn:   education.CompletedOn,
-		})
-	}
-
-	return mappedEducationPathways, err
-
+func (r *queryResolver) EducationPathway(ctx context.Context) ([]models.EducationPathway, error) {
+	return resource.GetEducationPathwayResource()
 }
 
 // Query returns QueryResolver implementation.
