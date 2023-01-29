@@ -31,7 +31,6 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 	}
 
 	properties := cursor.Results[0].Properties
-
 	landingPageConfigId, landingPageConfigIdParseErr := uuid.Parse(properties["Active Landing Page"].Relation[0].ID)
 	if landingPageConfigIdParseErr != nil {
 		return nil, landingPageConfigIdParseErr
@@ -42,35 +41,74 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 		return nil, siteConfigIdParseErr
 	}
 
-	siteConfigPage, siteConfigRetrievedErr := actions.RetrievePage(siteConfigId)
-	if siteConfigRetrievedErr != nil {
-		return nil, siteConfigRetrievedErr
-	}
+	websiteChan, websiteErrChan := FetchWebsiteConfig(siteConfigId)
+	landingPageChan, landingPageErrChan := FetchLandingPageConfig(landingPageConfigId)
 
-	landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
-	if landingPageRetrievedErr != nil {
-		return nil, landingPageRetrievedErr
+	website, websiteErr := <-websiteChan, <-websiteErrChan
+	if websiteErr != nil {
+		return nil, websiteErr
 	}
-
-	var coverImageUrl string
-	if len(landingPage.Properties["Cover Image"].Files) > 0 {
-		coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
+	landingPage, landingPageErr := <-landingPageChan, <-landingPageErrChan
+	if landingPageErr != nil {
+		return nil, landingPageErr
 	}
 
 	return &models.PageConfiguration{
-		LandingPage: models.LandingPage{
+		LandingPage: landingPage,
+		Website:     website,
+	}, nil
+
+}
+
+func FetchWebsiteConfig(siteConfigId uuid.UUID) (<-chan models.Website, <-chan error) {
+	errorChan := make(chan error)
+	websiteChan := make(chan models.Website)
+	go func() {
+		defer close(errorChan)
+		defer close(websiteChan)
+		siteConfigPage, siteConfigRetrievedErr := actions.RetrievePage(siteConfigId)
+		if siteConfigRetrievedErr != nil {
+			errorChan <- siteConfigRetrievedErr
+			return
+		}
+
+		websiteChan <- models.Website{
+			Name:        siteConfigPage.Properties["Name"].Title[0].PlainText,
+			Separator:   siteConfigPage.Properties["Separator"].RichText[0].PlainText,
+			TitleFormat: siteConfigPage.Properties["Title Format"].Select.Name,
+		}
+	}()
+	return websiteChan, errorChan
+
+}
+
+func FetchLandingPageConfig(landingPageConfigId uuid.UUID) (<-chan models.LandingPage, <-chan error) {
+	errorChan := make(chan error)
+	landingPageChan := make(chan models.LandingPage)
+	go func() {
+		defer close(errorChan)
+		defer close(landingPageChan)
+
+		landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
+		if landingPageRetrievedErr != nil {
+			errorChan <- landingPageRetrievedErr
+			return
+		}
+
+		var coverImageUrl string
+
+		if len(landingPage.Properties["Cover Image"].Files) > 0 {
+			coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
+		}
+
+		landingPageChan <- models.LandingPage{
 			Title:               landingPage.Properties["Title"].Title[0].PlainText,
 			Description:         landingPage.Properties["Description"].RichText[0].PlainText,
 			CoverImage:          coverImageUrl,
 			PrimaryButtonText:   landingPage.Properties["Primary Button Text"].RichText[0].PlainText,
 			SecondaryButtonText: landingPage.Properties["Secondary Button Text"].RichText[0].PlainText,
 			SecondaryButtonLink: landingPage.Properties["Secondary Button Link"].Url,
-		},
-		Website: models.Website{
-			Name:        siteConfigPage.Properties["Name"].Title[0].PlainText,
-			Separator:   siteConfigPage.Properties["Separator"].RichText[0].PlainText,
-			TitleFormat: siteConfigPage.Properties["Title Format"].Select.Name,
-		},
-	}, nil
-
+		}
+	}()
+	return landingPageChan, errorChan
 }

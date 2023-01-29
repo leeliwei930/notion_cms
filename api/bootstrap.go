@@ -6,7 +6,9 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/joho/godotenv"
 	"github.com/leeliwei930/notion_cms/api/routes"
 	"github.com/leeliwei930/notion_sdk/client"
@@ -25,6 +27,11 @@ func Start(config ...fiber.Config) {
 	server := fiber.New(config...)
 	server.Use(recover.New(recover.Config{
 		EnableStackTrace: true,
+	}))
+	server.Use(requestid.New())
+	server.Use(logger.New(logger.Config{
+		// For more options, see the Config section
+		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}​\n",
 	}))
 	routes.RegisterRoutes(server)
 	log.Fatal(server.Listen(addr))
