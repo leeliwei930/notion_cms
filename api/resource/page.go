@@ -2,7 +2,6 @@ package resource
 
 import (
 	"errors"
-	"sync"
 
 	"github.com/google/uuid"
 	"github.com/leeliwei930/notion_cms/api/models"
@@ -38,53 +37,40 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 		return nil, landingPageConfigIdParseErr
 	}
 
-	// siteConfigId, siteConfigIdParseErr := uuid.Parse(properties["Site Config"].ID)
-	// if siteConfigIdParseErr != nil {
-	// 	return nil, siteConfigIdParseErr
-	// }
-	var wg sync.WaitGroup
+	siteConfigId, siteConfigIdParseErr := uuid.Parse(properties["Site Config"].Relation[0].ID)
+	if siteConfigIdParseErr != nil {
+		return nil, siteConfigIdParseErr
+	}
 
-	landingPageRetrievedErrChan := make(chan error)
-	landingPageChan := make(chan *models.LandingPage)
-	wg.Add(1)
+	siteConfigPage, siteConfigRetrievedErr := actions.RetrievePage(siteConfigId)
+	if siteConfigRetrievedErr != nil {
+		return nil, siteConfigRetrievedErr
+	}
 
-	go func() {
-		defer wg.Done()
+	landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
+	if landingPageRetrievedErr != nil {
+		return nil, landingPageRetrievedErr
+	}
 
-		landingPage, landingPageRetrievedErr := actions.RetrievePage(landingPageConfigId)
-		if landingPageRetrievedErr != nil {
-			landingPageRetrievedErrChan <- landingPageRetrievedErr
-			return
-		}
+	var coverImageUrl string
+	if len(landingPage.Properties["Cover Image"].Files) > 0 {
+		coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
+	}
 
-		var coverImageUrl string
-		if len(landingPage.Properties["Cover Image"].Files) > 0 {
-			coverImageUrl = landingPage.Properties["Cover Image"].Files[0].File.Url
-		}
-
-		landingPageChan <- &models.LandingPage{
+	return &models.PageConfiguration{
+		LandingPage: models.LandingPage{
 			Title:               landingPage.Properties["Title"].Title[0].PlainText,
 			Description:         landingPage.Properties["Description"].RichText[0].PlainText,
 			CoverImage:          coverImageUrl,
 			PrimaryButtonText:   landingPage.Properties["Primary Button Text"].RichText[0].PlainText,
 			SecondaryButtonText: landingPage.Properties["Secondary Button Text"].RichText[0].PlainText,
 			SecondaryButtonLink: landingPage.Properties["Secondary Button Link"].Url,
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(landingPageChan)
-		close(landingPageRetrievedErrChan)
-	}()
-	pageConfig := &models.PageConfiguration{}
-
-	select {
-	case landingPage := <-landingPageChan:
-		pageConfig.LandingPage = landingPage
-		return pageConfig, nil
-	case receiveErr := <-landingPageRetrievedErrChan:
-		return nil, receiveErr
-	}
+		},
+		Website: models.Website{
+			Name:        siteConfigPage.Properties["Name"].Title[0].PlainText,
+			Separator:   siteConfigPage.Properties["Separator"].RichText[0].PlainText,
+			TitleFormat: siteConfigPage.Properties["Title Format"].Select.Name,
+		},
+	}, nil
 
 }
