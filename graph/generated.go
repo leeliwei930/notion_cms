@@ -31,9 +31,9 @@ func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
 }
 
 type Config struct {
-	Resolvers  ResolverRoot
 	Directives DirectiveRoot
 	Complexity ComplexityRoot
+	Resolvers  ResolverRoot
 }
 
 type ResolverRoot interface {
@@ -55,10 +55,6 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 	}
 
-	Experience struct {
-		RawContent func(childComplexity int) int
-	}
-
 	LandingPage struct {
 		CoverImage          func(childComplexity int) int
 		Description         func(childComplexity int) int
@@ -74,11 +70,6 @@ type ComplexityRoot struct {
 		Summary     func(childComplexity int) int
 		Theme       func(childComplexity int) int
 		Year        func(childComplexity int) int
-	}
-
-	PageConfiguration struct {
-		LandingPage func(childComplexity int) int
-		Website     func(childComplexity int) int
 	}
 
 	Query struct {
@@ -98,6 +89,15 @@ type ComplexityRoot struct {
 		Separator   func(childComplexity int) int
 		TitleFormat func(childComplexity int) int
 	}
+
+	PageConfiguration struct {
+		LandingPage func(childComplexity int) int
+		Website     func(childComplexity int) int
+	}
+
+	Experience struct {
+		RawContent func(childComplexity int) int
+	}
 }
 
 type QueryResolver interface {
@@ -107,9 +107,9 @@ type QueryResolver interface {
 }
 
 type executableSchema struct {
-	resolvers  ResolverRoot
 	directives DirectiveRoot
 	complexity ComplexityRoot
+	resolvers  ResolverRoot
 }
 
 func (e *executableSchema) Schema() *ast.Schema {
