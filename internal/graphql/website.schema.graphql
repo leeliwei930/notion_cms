@@ -1,0 +1,19 @@
+type LandingPage {
+  title: String!
+  description: String!
+  coverImage: String!
+  primaryButtonText: String!
+  secondaryButtonText: String!
+  secondaryButtonLink: String!
+}
+
+type Website {
+  name: String!
+  separator: String!
+  titleFormat: String!
+}
+
+type PageConfigurationPayload {
+  landingPage: LandingPage!
+  website: Website!
+}

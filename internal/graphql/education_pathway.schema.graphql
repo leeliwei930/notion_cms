@@ -1,0 +1,11 @@
+type EducationPathwayPayload {
+  title: String!
+  instituteName: String!
+  studyArea: String!
+  icon: String!
+  image: String!
+  location: String!
+  commencedOn: Time
+  completedOn: Time
+}
+

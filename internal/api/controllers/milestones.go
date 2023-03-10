@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/leeliwei930/notion_cms/api/resource"
+	"github.com/leeliwei930/notion_cms/internal/api/resource"
 )
 
 func GetMilestones(ctx *fiber.Ctx) error {

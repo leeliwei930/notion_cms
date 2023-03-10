@@ -1,0 +1,17 @@
+type MilestonePayload {
+  year: String!
+  summary: String!
+  Role: String!
+  theme: Theme
+  experiences: [Experience!]!
+}
+
+type Theme {
+  backgroundColor: String!
+  accentColor: String!
+  headlineColor: String!
+}
+
+type Experience {
+  rawContent: String!
+}

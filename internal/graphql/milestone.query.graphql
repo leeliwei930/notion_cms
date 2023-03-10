@@ -1,0 +1,7 @@
+extend type Query {
+	milestone: MilestoneQuery!
+}
+
+type MilestoneQuery {
+	all: [MilestonePayload!]!
+}

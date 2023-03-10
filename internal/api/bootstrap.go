@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/joho/godotenv"
-	"github.com/leeliwei930/notion_cms/api/routes"
+	"github.com/leeliwei930/notion_cms/internal/api/routes"
 	"github.com/leeliwei930/notion_sdk/client"
 	notionConfig "github.com/leeliwei930/notion_sdk/config"
 )

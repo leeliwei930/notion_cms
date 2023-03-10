@@ -1,0 +1,7 @@
+extend type Query {
+	education: EducationQuery!
+}
+
+type EducationQuery {
+	all: [EducationPathwayPayload!]!
+}

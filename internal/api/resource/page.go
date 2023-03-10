@@ -4,12 +4,12 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"github.com/leeliwei930/notion_cms/api/models"
+	"github.com/leeliwei930/notion_cms/generated/portfolio_graphql/models"
 	"github.com/leeliwei930/notion_sdk/actions"
 	"github.com/leeliwei930/notion_sdk/database/filter"
 )
 
-func GetDefaultPageResource() (*models.PageConfiguration, error) {
+func GetDefaultPageResource() (*models.PageConfigurationPayload, error) {
 	pageConfigDatabaseId, uuidErr := uuid.Parse(PageConfigurationDatabaseId)
 	if uuidErr != nil {
 		return nil, uuidErr
@@ -53,9 +53,9 @@ func GetDefaultPageResource() (*models.PageConfiguration, error) {
 		return nil, landingPageErr
 	}
 
-	return &models.PageConfiguration{
-		LandingPage: landingPage,
-		Website:     website,
+	return &models.PageConfigurationPayload{
+		LandingPage: &landingPage,
+		Website:     &website,
 	}, nil
 
 }

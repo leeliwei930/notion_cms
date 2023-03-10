@@ -2,12 +2,12 @@ package resource
 
 import (
 	"github.com/google/uuid"
-	"github.com/leeliwei930/notion_cms/api/models"
+	"github.com/leeliwei930/notion_cms/generated/portfolio_graphql/models"
 	"github.com/leeliwei930/notion_sdk/actions"
-	notionModels "github.com/leeliwei930/notion_sdk/models"
+	notionmodels "github.com/leeliwei930/notion_sdk/models"
 )
 
-func GetMilestonesExperiencesResource() ([]*models.Milestone, error) {
+func GetMilestonesExperiencesResource() ([]*models.MilestonePayload, error) {
 	milestoneDatabaseId, uuidErr := uuid.Parse(MilestoneDatabaseId)
 	if uuidErr != nil {
 		return nil, uuidErr
@@ -17,7 +17,7 @@ func GetMilestonesExperiencesResource() ([]*models.Milestone, error) {
 	if queryErr != nil {
 		return nil, queryErr
 	}
-	milestones := []*models.Milestone{}
+	milestones := []*models.MilestonePayload{}
 	// fetch experience page record
 	for _, milestoneRec := range cursor.Results {
 		yearProp := milestoneRec.Properties["Year"].Title[0].PlainText
@@ -34,7 +34,7 @@ func GetMilestonesExperiencesResource() ([]*models.Milestone, error) {
 			return nil, experiencesErr
 		}
 
-		milestones = append(milestones, &models.Milestone{
+		milestones = append(milestones, &models.MilestonePayload{
 			Year:        yearProp,
 			Role:        milestoneRec.Properties["Role"].RichText[0].PlainText,
 			Summary:     milestoneRec.Properties["Summary"].RichText[0].PlainText,
@@ -69,7 +69,7 @@ func FetchMilestoneTheme(milestoneThemeId string) (<-chan models.Theme, <-chan e
 	return themeChan, errorChan
 }
 
-func FetchExperiences(experienceIds []notionModels.RelationPropertyValue) (<-chan []*models.Experience, <-chan error) {
+func FetchExperiences(experienceIds []notionmodels.RelationPropertyValue) (<-chan []*models.Experience, <-chan error) {
 	experiencesChan := make(chan []*models.Experience)
 	errorChan := make(chan error)
 
