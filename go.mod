@@ -17,6 +17,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savsgio/dictpool v0.0.0-20221023140959-7bf2e61cea94 // indirect
 	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d // indirect
 	github.com/tinylib/msgp v1.1.6 // indirect
