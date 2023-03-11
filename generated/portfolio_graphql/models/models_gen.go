@@ -18,7 +18,8 @@ type EducationPathwayPayload struct {
 }
 
 type EducationQuery struct {
-	All []*EducationPathwayPayload `json:"all"`
+	All    []*EducationPathwayPayload `json:"all"`
+	Search []*EducationPathwayPayload `json:"search"`
 }
 
 type Experience struct {
@@ -49,6 +50,12 @@ type MilestoneQuery struct {
 type PageConfigurationPayload struct {
 	LandingPage *LandingPage `json:"landingPage"`
 	Website     *Website     `json:"website"`
+}
+
+type SearchEducationPathwayInput struct {
+	Title         string `json:"title"`
+	InstituteName string `json:"instituteName"`
+	Location      string `json:"location"`
 }
 
 type Theme struct {

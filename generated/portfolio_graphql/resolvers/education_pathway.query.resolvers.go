@@ -17,6 +17,11 @@ func (r *educationQueryResolver) All(ctx context.Context, obj *models.EducationQ
 	return resource.GetEducationPathwayResource()
 }
 
+// Search is the resolver for the search field.
+func (r *educationQueryResolver) Search(ctx context.Context, obj *models.EducationQuery, inputs models.SearchEducationPathwayInput) ([]*models.EducationPathwayPayload, error) {
+	return resource.SearchEducationPathway(inputs)
+}
+
 // Education is the resolver for the education field.
 func (r *queryResolver) Education(ctx context.Context) (*models.EducationQuery, error) {
 	return &models.EducationQuery{}, nil

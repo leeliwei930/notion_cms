@@ -2,3 +2,4 @@
 .idea/
 .env
 __debug_bin
+vendor/

@@ -2,6 +2,14 @@ extend type Query {
 	education: EducationQuery!
 }
 
+input SearchEducationPathwayInput  {
+	title: String!
+	instituteName: String!
+	location: String!
+}
+
+
 type EducationQuery {
 	all: [EducationPathwayPayload!]!
+	search(inputs: SearchEducationPathwayInput!) : [EducationPathwayPayload!]!
 }

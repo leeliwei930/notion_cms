@@ -64,6 +64,8 @@ models:
     fields:
       all:
         resolver: true
+      search:
+        resolver: true
   MilestoneQuery:
     fields:
       all:

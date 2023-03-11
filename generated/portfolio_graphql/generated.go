@@ -59,7 +59,8 @@ type ComplexityRoot struct {
 	}
 
 	EducationQuery struct {
-		All func(childComplexity int) int
+		All    func(childComplexity int) int
+		Search func(childComplexity int, inputs models.SearchEducationPathwayInput) int
 	}
 
 	Experience struct {
@@ -116,6 +117,7 @@ type ComplexityRoot struct {
 
 type EducationQueryResolver interface {
 	All(ctx context.Context, obj *models.EducationQuery) ([]*models.EducationPathwayPayload, error)
+	Search(ctx context.Context, obj *models.EducationQuery, inputs models.SearchEducationPathwayInput) ([]*models.EducationPathwayPayload, error)
 }
 type MilestoneQueryResolver interface {
 	All(ctx context.Context, obj *models.MilestoneQuery) ([]*models.MilestonePayload, error)
@@ -205,6 +207,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.EducationQuery.All(childComplexity), true
+
+	case "EducationQuery.search":
+		if e.complexity.EducationQuery.Search == nil {
+			break
+		}
+
+		args, err := ec.field_EducationQuery_search_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.EducationQuery.Search(childComplexity, args["inputs"].(models.SearchEducationPathwayInput)), true
 
 	case "Experience.rawContent":
 		if e.complexity.Experience.RawContent == nil {
@@ -381,7 +395,9 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputSearchEducationPathwayInput,
+	)
 	first := true
 
 	switch rc.Operation.Operation {
@@ -430,8 +446,16 @@ var sources = []*ast.Source{
 	education: EducationQuery!
 }
 
+input SearchEducationPathwayInput  {
+	title: String!
+	instituteName: String!
+	location: String!
+}
+
+
 type EducationQuery {
 	all: [EducationPathwayPayload!]!
+	search(inputs: SearchEducationPathwayInput!) : [EducationPathwayPayload!]!
 }
 `, BuiltIn: false},
 	{Name: "../../internal/graphql/education_pathway.schema.graphql", Input: `type EducationPathwayPayload {
@@ -509,6 +533,21 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_EducationQuery_search_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.SearchEducationPathwayInput
+	if tmp, ok := rawArgs["inputs"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("inputs"))
+		arg0, err = ec.unmarshalNSearchEducationPathwayInput2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgeneratedᚋportfolio_graphqlᚋmodelsᚐSearchEducationPathwayInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["inputs"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -967,6 +1006,79 @@ func (ec *executionContext) fieldContext_EducationQuery_all(ctx context.Context,
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EducationPathwayPayload", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EducationQuery_search(ctx context.Context, field graphql.CollectedField, obj *models.EducationQuery) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EducationQuery_search(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.EducationQuery().Search(rctx, obj, fc.Args["inputs"].(models.SearchEducationPathwayInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.EducationPathwayPayload)
+	fc.Result = res
+	return ec.marshalNEducationPathwayPayload2ᚕᚖgithubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgeneratedᚋportfolio_graphqlᚋmodelsᚐEducationPathwayPayloadᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EducationQuery_search(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EducationQuery",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "title":
+				return ec.fieldContext_EducationPathwayPayload_title(ctx, field)
+			case "instituteName":
+				return ec.fieldContext_EducationPathwayPayload_instituteName(ctx, field)
+			case "studyArea":
+				return ec.fieldContext_EducationPathwayPayload_studyArea(ctx, field)
+			case "icon":
+				return ec.fieldContext_EducationPathwayPayload_icon(ctx, field)
+			case "image":
+				return ec.fieldContext_EducationPathwayPayload_image(ctx, field)
+			case "location":
+				return ec.fieldContext_EducationPathwayPayload_location(ctx, field)
+			case "commencedOn":
+				return ec.fieldContext_EducationPathwayPayload_commencedOn(ctx, field)
+			case "completedOn":
+				return ec.fieldContext_EducationPathwayPayload_completedOn(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EducationPathwayPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_EducationQuery_search_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -1714,6 +1826,8 @@ func (ec *executionContext) fieldContext_Query_education(ctx context.Context, fi
 			switch field.Name {
 			case "all":
 				return ec.fieldContext_EducationQuery_all(ctx, field)
+			case "search":
+				return ec.fieldContext_EducationQuery_search(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EducationQuery", field.Name)
 		},
@@ -3982,6 +4096,50 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputSearchEducationPathwayInput(ctx context.Context, obj interface{}) (models.SearchEducationPathwayInput, error) {
+	var it models.SearchEducationPathwayInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "instituteName", "location"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "instituteName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("instituteName"))
+			it.InstituteName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "location":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("location"))
+			it.Location, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4081,6 +4239,26 @@ func (ec *executionContext) _EducationQuery(ctx context.Context, sel ast.Selecti
 					}
 				}()
 				res = ec._EducationQuery_all(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "search":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._EducationQuery_search(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -5070,6 +5248,11 @@ func (ec *executionContext) marshalNPageConfigurationPayload2ᚖgithubᚗcomᚋl
 		return graphql.Null
 	}
 	return ec._PageConfigurationPayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSearchEducationPathwayInput2githubᚗcomᚋleeliwei930ᚋnotion_cmsᚋgeneratedᚋportfolio_graphqlᚋmodelsᚐSearchEducationPathwayInput(ctx context.Context, v interface{}) (models.SearchEducationPathwayInput, error) {
+	res, err := ec.unmarshalInputSearchEducationPathwayInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
