@@ -47,37 +47,44 @@ func SearchEducationPathway(input models.SearchEducationPathwayInput) ([]*models
 	if idErr != nil {
 		return nil, idErr
 	}
+	predicates := []*filter.QueryProps{}
 
-	predicates := []filter.QueryProps{
-		{
+	if input.Title != nil && len(*input.Title) > 0 {
+		predicates = append(predicates, &filter.QueryProps{
 			Property: "Title",
-			RichText: &filter.Text{
-				StartsWith: input.Title,
+			Title: &filter.Text{
+				Contains: *input.Title,
 			},
-			Or: []filter.QueryProps{
-				{
-					Property: "Location",
-					RichText: &filter.Text{
-						StartsWith: input.Location,
-					},
-				},
-				{
-					Property: "Institute Name",
-					RichText: &filter.Text{
-						StartsWith: input.InstituteName,
-					},
-				},
-			},
-		},
+		})
 	}
 
+	if input.Location != nil && len(*input.Location) > 0 {
+		predicates = append(predicates, &filter.QueryProps{
+			Property: "Location",
+			RichText: &filter.Text{
+				Contains: *input.Location,
+			},
+		})
+	}
+
+	if input.InstituteName != nil && len(*input.InstituteName) > 0 {
+		predicates = append(predicates, &filter.QueryProps{
+			Property: "Institute Name",
+			RichText: &filter.Text{
+				Contains: *input.InstituteName,
+			},
+		})
+	}
+
+	var query *filter.QueryProps
+	if len(predicates) > 0 {
+		query = &filter.QueryProps{
+			Or: predicates,
+		}
+	}
 	cursor, queryErr := actions.QueryDatabase(
 		eduPathwayDatabaseID,
-		actions.FilterWith(
-			&filter.QueryProps{
-				And: predicates,
-			},
-		),
+		actions.FilterWith(query),
 	)
 	if queryErr != nil {
 		return nil, queryErr

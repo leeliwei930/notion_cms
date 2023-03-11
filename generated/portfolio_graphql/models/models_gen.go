@@ -53,9 +53,9 @@ type PageConfigurationPayload struct {
 }
 
 type SearchEducationPathwayInput struct {
-	Title         string `json:"title"`
-	InstituteName string `json:"instituteName"`
-	Location      string `json:"location"`
+	Title         *string `json:"title"`
+	InstituteName *string `json:"instituteName"`
+	Location      *string `json:"location"`
 }
 
 type Theme struct {

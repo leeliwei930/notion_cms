@@ -15,11 +15,12 @@ func GetDefaultPageResource() (*models.PageConfigurationPayload, error) {
 		return nil, uuidErr
 	}
 
+	defaultConfig := "Default"
 	cursor, queryErr := actions.QueryDatabase(pageConfigDatabaseId,
 		actions.FilterWith(&filter.QueryProps{
 			Property: "Name",
 			RichText: &filter.Text{
-				Equals: "Default",
+				Equals: defaultConfig,
 			},
 		}))
 	if queryErr != nil {

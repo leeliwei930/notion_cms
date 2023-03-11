@@ -447,9 +447,9 @@ var sources = []*ast.Source{
 }
 
 input SearchEducationPathwayInput  {
-	title: String!
-	instituteName: String!
-	location: String!
+	title: String
+	instituteName: String
+	location: String
 }
 
 
@@ -4114,7 +4114,7 @@ func (ec *executionContext) unmarshalInputSearchEducationPathwayInput(ctx contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			it.Title, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4122,7 +4122,7 @@ func (ec *executionContext) unmarshalInputSearchEducationPathwayInput(ctx contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("instituteName"))
-			it.InstituteName, err = ec.unmarshalNString2string(ctx, v)
+			it.InstituteName, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4130,7 +4130,7 @@ func (ec *executionContext) unmarshalInputSearchEducationPathwayInput(ctx contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("location"))
-			it.Location, err = ec.unmarshalNString2string(ctx, v)
+			it.Location, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
